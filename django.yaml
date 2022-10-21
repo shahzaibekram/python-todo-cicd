@@ -1,0 +1,11 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: django-todo
+spec:
+  containers:
+  - name: container1
+    image: shahzaib2468/py-todo-app
+    ports:
+    - containerPort: 80
+
