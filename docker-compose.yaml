@@ -3,6 +3,5 @@ version: "3.8"
 services:
   web:
     image: shahzaib2468/my-pytodo-app:latest
-      dockerfile: Dockerfile
     ports:
       - "8000:8000"
