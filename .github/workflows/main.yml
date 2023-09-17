@@ -64,14 +64,14 @@ jobs:
     needs: deploy
 
     steps:
-      - name: SSH into Server and Start Django
-        uses: appleboy/ssh-action@master
+      - name: SSH into Server
+        # uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ${{ secrets.TARGET_DIR }}/  # Navigate to your project directory
+            cd ${{ secrets.TARGET_DIR }}  # Navigate to your project directory
             # source venv/bin/activate      # Activate your virtual environment if used
             sudo python3 manage.py migrate
             sudo python3 manage.py runserver
