@@ -64,7 +64,7 @@ jobs:
     needs: deploy
 
     steps:
-      - name: SSH into Server
+      - name: SSH into server
         # uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS }}
