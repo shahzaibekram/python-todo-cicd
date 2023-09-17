@@ -21,4 +21,4 @@ jobs:
       - name: Deploy to EC2
         run: |
           scp -i erp.pem -r ./* ubuntu@ec2-18-118-7-108.us-east-2.compute.amazonaws.com:/home/ubuntu/python-todo-cicd
-          ssh -i erp.pem ubuntu@ec2-18-118-7-108.us-east-2.compute.amazonaws.com 'cd /home/ubuntu/python-todo-cicd && sudo python3 manage.py runserver 0.0.0.0:8000'
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }} 'cd /home/ubuntu/python-todo-cicd && sudo python3 manage.py runserver 0.0.0.0:8000'
