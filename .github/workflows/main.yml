@@ -1,3 +1,32 @@
+name: Python Application CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      # - name: Install dependencies
+      #   run: pip install -r requirements.txt
+
+      - name: Deploy to EC2
+        run: |
+          scp -i ${{ secrets.EC2_SSH_KEY }} -r ./* ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP_ADDRESS }}:/home/ubuntu/python-todo-cicd/
+          ssh -i ${{ secrets.EC2_SSH_KEY }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP_ADDRESS }} 'cd /home/ubuntu/python-todo-cicd/ && python3 manage.py migrate && python manage.py && python3 manage.py runserver 0.0.0.0:8000'
+
 # name: Django CI/CD
 
 # on:
@@ -23,7 +52,7 @@
 #           # TARGET: ${{ secrets.TARGET_DIR }}
 
 #       # - name: Executing remote ssh commands using ssh key
-#       #   uses: appleboy/ssh-action@master
+#       #   uses: appleboy/ssh-action@main
 #         with:
 #           host: ${{ secrets.HOST_DNS }}
 #           username: ${{ secrets.USERNAME }}
@@ -34,44 +63,4 @@
 #             sudo python3 manage.py runserver 0.0.0.0:8000
 
 
-name: Django CI/CD
 
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    name: Deploy to EC2 on main branch push
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout the files
-        uses: actions/checkout@v2
-
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-
-  runserver:
-    name: Start Django Server
-    runs-on: ubuntu-latest
-    needs: deploy
-
-    steps:
-      - name: SSH into server
-        # uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST_DNS }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ${{ secrets.TARGET_DIR }}/  # Navigate to your project directory
-            # source venv/bin/activate      # Activate your virtual environment if used
-            # sudo python3 manage.py migrate
-            sudo python3 manage.py runserver 0.0.0.0:8000
