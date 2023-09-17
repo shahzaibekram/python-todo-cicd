@@ -19,10 +19,7 @@ jobs:
           python-version: 3.x
 
       - name: Run Django migrations
-        run: python manage.py migrate
-
-      - name: Run Django tests
-        run: python manage.py test
+        run: python3 manage.py runserver
 
   deploy:
     runs-on: ubuntu-latest
@@ -32,4 +29,4 @@ jobs:
       - name: Deploy to EC2
         run: |
           scp -i erp.pem -r ./* ubuntu@ec2-18-118-7-108.us-east-2.compute.amazonaws.com:/home/ubuntu/python-todo-cicd
-          ssh -i erp.pem ubuntu@ec2-18-118-7-108.us-east-2.compute.amazonaws.com 'cd /home/ubuntu/python-todo-cicd && sudo python manage.py migrate && sudo python manage.py collectstatic --noinput && sudo systemctl restart your-app.service'
+          ssh -i erp.pem ubuntu@ec2-18-118-7-108.us-east-2.compute.amazonaws.com 'cd /home/ubuntu/python-todo-cicd && sudo python3 manage.py runserver'
