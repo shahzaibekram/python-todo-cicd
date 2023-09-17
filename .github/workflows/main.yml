@@ -24,8 +24,8 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          scp -i ${{ secrets.EC2_SSH_KEY }} -r ./* ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP_ADDRESS }}:/home/ubuntu/python-todo-cicd/
-          ssh -i ${{ secrets.EC2_SSH_KEY }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_IP_ADDRESS }} 'cd /home/ubuntu/python-todo-cicd/ && python3 manage.py migrate && python manage.py && python3 manage.py runserver 0.0.0.0:8000'
+          scp -i ${{ secrets.EC2_SSH_KEY }} -r ./* ${{ secrets.USERNAME }}@${{ secrets.EC2_IP_ADDRESS }}:/home/ubuntu/python-todo-cicd/
+          ssh -i ${{ secrets.EC2_SSH_KEY }} ${{ secrets.USERNAME }}@${{ secrets.EC2_IP_ADDRESS }} 'cd /home/ubuntu/python-todo-cicd/ && python3 manage.py migrate && python manage.py && python3 manage.py runserver 0.0.0.0:8000'
 
 # name: Django CI/CD
 
